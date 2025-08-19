@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { MenuBar } from "@/components/MenuBar";
-import { HighscoreBoard } from "@/components/HighscoreBoard";
+import HighscoreBoard from "@/components/HighscoreBoard";
 
 // ===== GAME CONSTANTS =====
 const W = 842;
