@@ -58,7 +58,7 @@ const HighscoreBoard = ({
         className="absolute inset-0 w-full h-full"
         style={{ 
           imageRendering: 'pixelated',
-          objectFit: 'fill'
+          objectFit: 'contain' // 👈 keeps proportions
         }}
         draggable={false}
       />
