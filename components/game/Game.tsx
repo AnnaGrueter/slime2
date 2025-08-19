@@ -11,7 +11,7 @@ const ABOUT_SCALE = 0.8;
 const HELP_SCALE = 0.75;
 const INTRO_SCALE = 0.75;
 const ENEMIES_SCALE = 0.75;
-const BOARD_SCALE = 0.25;
+const BOARD_SCALE = 0.75;
 const ENTRY_SCALE = 0.25;
 const GAMEOVER_SCALE = 0.5;
 const HS_ENTRY_SCALE = 0.50;
@@ -831,7 +831,7 @@ export default function Game() {
             className="pixelated"
             style={{ 
               width: Math.round(W * BOARD_SCALE),
-              height: Math.round(W * BOARD_SCALE ), // maintain aspect ratio
+              height: Math.round(W * BOARD_SCALE*0.25), // maintain aspect ratio
               imageRendering: 'pixelated'
             }}
           />
