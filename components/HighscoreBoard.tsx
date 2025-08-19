@@ -11,24 +11,20 @@ interface HighScoreEntry {
 interface HighscoreBoardProps {
   scores?: HighScoreEntry[];
   onClose: () => void;
-  onClear?: () => void;
   className?: string;
-  style?: React.CSSProperties;  // 👈 Add this line
 }
 
-const HighscoreBoard = ({
+export const HighscoreBoard = ({ 
   scores = [],
   onClose,
-  onClear,
-  className,
-  style
+  className = ""
 }: HighscoreBoardProps) => {
   // Ensure we always have exactly 10 entries
   const defaultScores: HighScoreEntry[] = Array.from({ length: 10 }, () => ({ 
     name: "Nobody", 
     score: 0 
   }));
-  
+
   const displayScores = [...scores];
   while (displayScores.length < 10) {
     displayScores.push({ name: "Nobody", score: 0 });
@@ -48,9 +44,9 @@ const HighscoreBoard = ({
 
   return (
     <div 
-    className={`bg-white border-4 border-black shadow-lg ${className || ""}`}
-    style={{ width: "500px", height: "400px", ...style }}
-  >
+      className={`relative ${className}`}
+      style={{ width: '560px', height: '420px' }}
+    >
       {/* Background Image */}
       <img
         src="/components/art/ui/highscores.png"
@@ -58,11 +54,11 @@ const HighscoreBoard = ({
         className="absolute inset-0 w-full h-full"
         style={{ 
           imageRendering: 'pixelated',
-          objectFit: 'contain' // 👈 keeps proportions
+          objectFit: 'fill'
         }}
         draggable={false}
       />
-      
+
       {/* Close Button */}
       <div
         role="button"
@@ -82,7 +78,7 @@ const HighscoreBoard = ({
           ×
         </div>
       </div>
-      
+
       {/* Score Entries Overlay */}
       <div className="absolute inset-0 pointer-events-none">
         {displayScores.map((entry, index) => {
@@ -99,7 +95,7 @@ const HighscoreBoard = ({
               >
                 {entry.name}
               </div>
-              
+
               {/* Score - right aligned at x=520 */}
               <div
                 className="absolute"
