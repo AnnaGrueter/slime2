@@ -225,21 +225,21 @@ export default function Game() {
 
   // Create enemy
   const createEnemy = useCallback((currentLevel: number): Enemy => {
-  const dropFreq = getDropFrequencyForLevel(currentLevel);
-  const now = performance.now();
-  const nextIn = dropFreq.min + Math.random() * (dropFreq.max - dropFreq.min);
+    const dropFreq = getDropFrequencyForLevel(currentLevel);
+    const now = performance.now();
+    const nextIn = dropFreq.min + Math.random() * (dropFreq.max - dropFreq.min);
 
-  return {
-    x: Math.random() * (W - ENEMY_W),
-    y: -ENEMY_H,
-    id: nextEnemyIdRef.current++,
-    vx: (Math.random() - 0.5) * 1.0,
-    vy: 0.15 + Math.random() * 0.2,
-    zigzagTimer: 0,
-    zigzagDirection: Math.random() > 0.5 ? 1 : -1,
-    nextDropAt: now + nextIn,
-  };
-}, []);
+    return {
+      x: Math.random() * (W - ENEMY_W),
+      y: -ENEMY_H,
+      id: nextEnemyIdRef.current++,
+      vx: (Math.random() - 0.5) * 1.0,
+      vy: 0.15 + Math.random() * 0.2,
+      zigzagTimer: 0,
+      zigzagDirection: Math.random() > 0.5 ? 1 : -1,
+      nextDropAt: now + nextIn,
+    };
+  }, []);
 
   // Init enemies on start/reset
   useEffect(() => {
@@ -360,24 +360,27 @@ export default function Game() {
             }
           }
 
-         // Random drop spawning (use rAF time consistently)
-// Random drop spawning (use rAF time consistently)
-const dropFreq = getDropFrequencyForLevel(level);
-if (currentTime >= newEnemy.nextDropAt) {
-  // spawn one drop
-  setDrops(prev => [
-    ...prev,
-    {
-      x: newEnemy.x + ENEMY_W / 2 - DROP_W / 2,
-      y: newEnemy.y + ENEMY_H,
-      id: nextDropIdRef.current++,
-    },
-  ]);
+          // Random drop spawning (use rAF time consistently)
+          const dropFreq = getDropFrequencyForLevel(level);
+          if (t >= e.nextDropAt) {
+            // spawn one drop
+            setDrops(prev => [
+              ...prev,
+              {
+                x: e.x + ENEMY_W / 2 - DROP_W / 2,
+                y: e.y + ENEMY_H,
+                id: nextDropIdRef.current++,
+              },
+            ]);
 
-  // schedule the next one
-  const nextIn = dropFreq.min + Math.random() * (dropFreq.max - dropFreq.min);
-  newEnemy.nextDropAt = currentTime + nextIn;
-}
+            // schedule the next one
+            const nextIn = dropFreq.min + Math.random() * (dropFreq.max - dropFreq.min);
+            e.nextDropAt = t + nextIn;
+          }
+
+          return e;
+        })
+      );
 
       // drops
       setDrops((prev) =>
@@ -471,20 +474,20 @@ if (currentTime >= newEnemy.nextDropAt) {
       drops.forEach((d) => assets.drop && ctx.drawImage(assets.drop, d.x, d.y, DROP_W, DROP_H));
 
       // draw player
-     if (assets.player) {
-  ctx.drawImage(assets.player, playerX, PLAYER_Y, PLAYER_W, PLAYER_H);
-}
+      if (assets.player) {
+        ctx.drawImage(assets.player, playerX, PLAYER_Y, PLAYER_W, PLAYER_H);
+      }
 
-if (!gameOver) {
-  gameLoopRef.current = requestAnimationFrame(loop);
-}
-    }
+      if (!gameOver) {
+        gameLoopRef.current = requestAnimationFrame(loop);
+      }
+    };
 
     gameLoopRef.current = requestAnimationFrame(loop);
     return () => {
       if (gameLoopRef.current) cancelAnimationFrame(gameLoopRef.current);
     };
-  }, [assetsLoaded, gameOver, isPaused, activePanel, menuOpen, shooting, playerX, bullets, enemies, drops, score, level, lives, assets, createEnemy, playSound]);
+  }, [assetsLoaded, gameOver, isPaused, activePanel, menuOpen, shooting, playerX, bullets, enemies, drops, score, level, lives, assets, createEnemy, playSound, highScoreEntry.show]);
 
   // Reset game
   const resetGame = () => {
@@ -556,7 +559,7 @@ if (!gameOver) {
         });
       }
     }
-  }, [gameOver, gameOverShown, score, playSound]);
+  }, [gameOver, gameOverShown, score, playSound, qualifiesForHighScore]);
 
   // High score entry handlers
   const handleHighScoreEntryOk = () => {
