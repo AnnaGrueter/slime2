@@ -829,12 +829,12 @@ export default function Game() {
             scores={highScores} 
             onClose={handleCloseHighScores}
             className="pixelated"
-            style={{ transform: `scale(${BOARD_SCALE})`, transformOrigin: "top left" }}
-            /*style={{ 
+           // style={{ transform: `scale(${BOARD_SCALE})`, transformOrigin: "top left" }}
+            style={{ 
               width: Math.round(W * BOARD_SCALE),
-              height: Math.round(W * BOARD_SCALE*0.25), // maintain aspect ratio
+             // height: Math.round(W * BOARD_SCALE*0.25), // maintain aspect ratio
               imageRendering: 'pixelated'
-            }}*/
+            }}
           />
         </div>
       )}
