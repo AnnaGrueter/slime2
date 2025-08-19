@@ -187,7 +187,7 @@ export default function Game() {
     Math.min(1 + currentLevel, MAX_ENEMIES);
 
   const getSpawnDelayForLevel = (currentLevel: number) =>
-    Math.max(3000, 9250 - currentLevel * 1250);
+    Math.max(2000, 6000 - currentLevel * 800);
 
   const getDropFrequencyForLevel = (currentLevel: number) => {
     const baseMin = Math.max(1500, 4000 - currentLevel * 500);
@@ -233,8 +233,8 @@ export default function Game() {
       x: Math.random() * (W - ENEMY_W),
       y: -ENEMY_H,
       id: nextEnemyIdRef.current++,
-      vx: (Math.random() - 0.5) * 2.0,
-      vy: 0.3 + Math.random() * 0.4,
+      vx: (Math.random() - 0.5) * 3.0,
+      vy: 0.5 + Math.random() * 0.5,
       zigzagTimer: 0,
       zigzagDirection: Math.random() > 0.5 ? 1 : -1,
       nextDropAt: now + nextIn,
