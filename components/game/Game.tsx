@@ -83,6 +83,8 @@ export default function Game() {
   const nextDropIdRef = useRef<number>(1);
   const enemySpawnTimerRef = useRef<number>(0);
   const audioEnabledRef = useRef<boolean>(false);
+  const lastHitTimeRef = useRef<number>(0);
+  const INVINCIBILITY_TIME = 1000; // 1 second of invincibility after being hit
 
   // Game state
   const [playerX, setPlayerX] = useState(W / 2 - PLAYER_W / 2);
@@ -435,35 +437,46 @@ export default function Game() {
       }
 
       // enemy vs player
-      enemies.forEach((enemy) => {
-        if (checkCollision(
-          { x: enemy.x, y: enemy.y, w: ENEMY_W, h: ENEMY_H },
-          { x: playerX, y: PLAYER_Y, w: PLAYER_W, h: PLAYER_H }
-        )) {
-          setLives(prev => {
-            const next = prev - 1;
-            if (next <= 0) setGameOver(true);
-            return next;
-          });
-          playSound('/components/sfx/player_hit.wav');
+      const currentTime = performance.now();
+      if (currentTime - lastHitTimeRef.current > INVINCIBILITY_TIME) {
+        for (const enemy of enemies) {
+          if (checkCollision(
+            { x: enemy.x, y: enemy.y, w: ENEMY_W, h: ENEMY_H },
+            { x: playerX, y: PLAYER_Y, w: PLAYER_W, h: PLAYER_H }
+          )) {
+            lastHitTimeRef.current = currentTime;
+            setLives(prev => {
+              const next = prev - 1;
+              if (next <= 0) setGameOver(true);
+              return next;
+            });
+            playSound('/components/sfx/player_hit.wav');
+            break; // Only process one collision per frame
+          }
         }
-      });
+      }
 
       // drop vs player
-      setDrops((prevDrops) => {
-        const rd = [...prevDrops];
-        prevDrops.forEach((d, i) => {
-          if (checkCollision({ x: d.x, y: d.y, w: DROP_W, h: DROP_H }, { x: playerX, y: PLAYER_Y, w: PLAYER_W, h: PLAYER_H })) {
-            rd.splice(i, 1);
-            setLives((prev) => {
-              const nl = prev - 1;
-              if (nl <= 0) setGameOver(true);
-              return nl;
-            });
+      if (currentTime - lastHitTimeRef.current > INVINCIBILITY_TIME) {
+        setDrops((prevDrops) => {
+          const rd = [...prevDrops];
+          for (let i = prevDrops.length - 1; i >= 0; i--) {
+            const d = prevDrops[i];
+            if (checkCollision({ x: d.x, y: d.y, w: DROP_W, h: DROP_H }, { x: playerX, y: PLAYER_Y, w: PLAYER_W, h: PLAYER_H })) {
+              rd.splice(i, 1);
+              lastHitTimeRef.current = currentTime;
+              setLives((prev) => {
+                const nl = prev - 1;
+                if (nl <= 0) setGameOver(true);
+                return nl;
+              });
+              playSound('/components/sfx/player_hit.wav');
+              break; // Only process one collision per frame
+            }
           }
+          return rd;
         });
-        return rd;
-      });
+      }
 
       // draw enemies
       enemies.forEach((e) => assets.slime && ctx.drawImage(assets.slime, e.x, e.y, ENEMY_W, ENEMY_H));
@@ -513,6 +526,7 @@ export default function Game() {
     nextBulletIdRef.current = 1;
     nextDropIdRef.current = 1;
     lastShotRef.current = 0;
+    lastHitTimeRef.current = 0;
   };
 
   // Panel handlers (openers + generic closer)
