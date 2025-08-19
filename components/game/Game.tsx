@@ -830,8 +830,8 @@ export default function Game() {
             onClose={handleCloseHighScores}
             className="pixelated"
             style={{ 
-              width: Math.round(W * BOARD_SCALE * 0.25),
-              height: Math.round(W * BOARD_SCALE * 0.25), // maintain aspect ratio
+              width: Math.round(W * BOARD_SCALE),
+              height: Math.round(W * BOARD_SCALE ), // maintain aspect ratio
               imageRendering: 'pixelated'
             }}
           />
