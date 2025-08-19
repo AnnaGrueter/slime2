@@ -12,6 +12,7 @@ interface HighscoreBoardProps {
   scores?: HighScoreEntry[];
   onClose: () => void;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export const HighscoreBoard = ({ 
