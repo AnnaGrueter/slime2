@@ -118,3 +118,4 @@ const HighscoreBoard = ({
     </div>
   );
 };
+export default HighscoreBoard;   // 👈 Add this line
