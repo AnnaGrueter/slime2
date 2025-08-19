@@ -446,9 +446,12 @@ export default function Game() {
           )) {
             lastHitTimeRef.current = currentTime;
             setLives(prev => {
-              const next = prev - 1;
-              if (next <= 0) setGameOver(true);
-              return next;
+              const newLives = prev - 1;
+              if (newLives <= 0) {
+                setGameOver(true);
+                return 0;
+              }
+              return newLives;
             });
             playSound('/components/sfx/player_hit.wav');
             break; // Only process one collision per frame
@@ -466,9 +469,12 @@ export default function Game() {
               rd.splice(i, 1);
               lastHitTimeRef.current = currentTime;
               setLives((prev) => {
-                const nl = prev - 1;
-                if (nl <= 0) setGameOver(true);
-                return nl;
+                const newLives = prev - 1;
+                if (newLives <= 0) {
+                  setGameOver(true);
+                  return 0;
+                }
+                return newLives;
               });
               playSound('/components/sfx/player_hit.wav');
               break; // Only process one collision per frame
