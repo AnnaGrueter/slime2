@@ -187,7 +187,7 @@ export default function Game() {
     Math.min(1 + currentLevel, MAX_ENEMIES);
 
   const getSpawnDelayForLevel = (currentLevel: number) =>
-    Math.max(2000, 6000 - currentLevel * 800);
+    Math.max(500, 1500 - currentLevel * 200);
 
   const getDropFrequencyForLevel = (currentLevel: number) => {
     const baseMin = Math.max(1500, 4000 - currentLevel * 500);
@@ -245,7 +245,8 @@ export default function Game() {
   useEffect(() => {
     if (!assetsLoaded || gameOver) return;
     setEnemies([]);
-    enemySpawnTimerRef.current = 0;
+    // Start with timer already at spawn delay so first enemy spawns immediately
+    enemySpawnTimerRef.current = getSpawnDelayForLevel(level);
   }, [assetsLoaded, gameOver]);
 
   // Mouse movement -> player X
