@@ -438,42 +438,51 @@ export default function Game() {
 
       // enemy vs player
       const currentTime = performance.now();
+      let playerHit = false;
+
+      // Check for any collision (enemy or drop) but only process one hit per frame
       if (currentTime - lastHitTimeRef.current > INVINCIBILITY_TIME) {
+        // Check enemy collisions first
         for (const enemy of enemies) {
           if (checkCollision(
             { x: enemy.x, y: enemy.y, w: ENEMY_W, h: ENEMY_H },
             { x: playerX, y: PLAYER_Y, w: PLAYER_W, h: PLAYER_H }
           )) {
-            lastHitTimeRef.current = currentTime;
-            setLives(prev => prev - 1);
-            playSound('/components/sfx/player_hit.wav');
-            break; // Only process one collision per frame
+            playerHit = true;
+            break;
           }
+        }
+
+        // Check drop collisions only if not already hit by enemy
+        if (!playerHit) {
+          for (const drop of drops) {
+            if (checkCollision(
+              { x: drop.x, y: drop.y, w: DROP_W, h: DROP_H },
+              { x: playerX, y: PLAYER_Y, w: PLAYER_W, h: PLAYER_H }
+            )) {
+              playerHit = true;
+              break;
+            }
+          }
+        }
+
+        // Process the hit if any collision occurred
+        if (playerHit) {
+          lastHitTimeRef.current = currentTime;
+          setLives(prev => prev - 1);
+          playSound('/components/sfx/player_hit.wav');
         }
       }
 
-      // drop vs player
-      if (currentTime - lastHitTimeRef.current > INVINCIBILITY_TIME) {
+      // Remove drops that hit the player
+      if (playerHit) {
         setDrops((prevDrops) => {
-          let hitDetected = false;
-          const remainingDrops = [];
-          for (let i = prevDrops.length - 1; i >= 0; i--) {
-            const d = prevDrops[i];
-            if (checkCollision({ x: d.x, y: d.y, w: DROP_W, h: DROP_H }, { x: playerX, y: PLAYER_Y, w: PLAYER_W, h: PLAYER_H })) {
-              // Drop hits player - remove the drop and damage player
-              if (!hitDetected) {
-                hitDetected = true;
-                lastHitTimeRef.current = currentTime;
-                setLives(prev => prev - 1);
-                playSound('/components/sfx/player_hit.wav');
-              }
-              // Don't add this drop to remaining drops (it disappears)
-            } else {
-              // Keep this drop
-              remainingDrops.push(d);
-            }
-          }
-          return remainingDrops;
+          return prevDrops.filter(d => 
+            !checkCollision(
+              { x: d.x, y: d.y, w: DROP_W, h: DROP_H },
+              { x: playerX, y: PLAYER_Y, w: PLAYER_W, h: PLAYER_H }
+            )
+          );
         });
       }
 
