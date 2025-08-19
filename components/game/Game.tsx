@@ -44,7 +44,7 @@ const MAX_ENEMIES = 6;
 // Drops
 const DROP_W = 12;
 const DROP_H = 12;
-const DROP_SPEED = 2.5;
+const DROP_SPEED = 4.0;
 
 // Score/Lives
 const SCORE_PER_SLIME = 10;
