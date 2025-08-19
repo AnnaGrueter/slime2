@@ -445,14 +445,7 @@ export default function Game() {
             { x: playerX, y: PLAYER_Y, w: PLAYER_W, h: PLAYER_H }
           )) {
             lastHitTimeRef.current = currentTime;
-            setLives(prev => {
-              const newLives = prev - 1;
-              if (newLives <= 0) {
-                setGameOver(true);
-                return 0;
-              }
-              return newLives;
-            });
+            setLives(prev => prev - 1);
             playSound('/components/sfx/player_hit.wav');
             break; // Only process one collision per frame
           }
@@ -462,25 +455,25 @@ export default function Game() {
       // drop vs player
       if (currentTime - lastHitTimeRef.current > INVINCIBILITY_TIME) {
         setDrops((prevDrops) => {
-          const rd = [...prevDrops];
+          let hitDetected = false;
+          const remainingDrops = [];
           for (let i = prevDrops.length - 1; i >= 0; i--) {
             const d = prevDrops[i];
             if (checkCollision({ x: d.x, y: d.y, w: DROP_W, h: DROP_H }, { x: playerX, y: PLAYER_Y, w: PLAYER_W, h: PLAYER_H })) {
-              rd.splice(i, 1);
-              lastHitTimeRef.current = currentTime;
-              setLives((prev) => {
-                const newLives = prev - 1;
-                if (newLives <= 0) {
-                  setGameOver(true);
-                  return 0;
-                }
-                return newLives;
-              });
-              playSound('/components/sfx/player_hit.wav');
-              break; // Only process one collision per frame
+              // Drop hits player - remove the drop and damage player
+              if (!hitDetected) {
+                hitDetected = true;
+                lastHitTimeRef.current = currentTime;
+                setLives(prev => prev - 1);
+                playSound('/components/sfx/player_hit.wav');
+              }
+              // Don't add this drop to remaining drops (it disappears)
+            } else {
+              // Keep this drop
+              remainingDrops.push(d);
             }
           }
-          return rd;
+          return remainingDrops;
         });
       }
 
@@ -564,6 +557,13 @@ export default function Game() {
   };
 
   // Handle game over
+  useEffect(() => {
+    if (lives <= 0 && !gameOver) {
+      setGameOver(true);
+    }
+  }, [lives, gameOver]);
+
+  // Handle game over display
   useEffect(() => {
     if (gameOver && !gameOverShown) {
       setGameOverShown(true);
