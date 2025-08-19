@@ -361,26 +361,23 @@ export default function Game() {
           }
 
          // Random drop spawning (use rAF time consistently)
-          const dropFreq = getDropFrequencyForLevel(level);
-          if (t >= e.nextDropAt) {
-            // spawn one drop
-            setDrops(prev => [
-              ...prev,
-              {
-                x: e.x + ENEMY_W / 2 - DROP_W / 2,
-                y: e.y + ENEMY_H,
-                id: nextDropIdRef.current++,
-              },
-            ]);
+// Random drop spawning (use rAF time consistently)
+const dropFreq = getDropFrequencyForLevel(level);
+if (currentTime >= newEnemy.nextDropAt) {
+  // spawn one drop
+  setDrops(prev => [
+    ...prev,
+    {
+      x: newEnemy.x + ENEMY_W / 2 - DROP_W / 2,
+      y: newEnemy.y + ENEMY_H,
+      id: nextDropIdRef.current++,
+    },
+  ]);
 
-            // schedule the next one
-            const nextIn = dropFreq.min + Math.random() * (dropFreq.max - dropFreq.min);
-            e.nextDropAt = t + nextIn;
-          }
-
-          return e;
-        })
-      );
+  // schedule the next one
+  const nextIn = dropFreq.min + Math.random() * (dropFreq.max - dropFreq.min);
+  newEnemy.nextDropAt = currentTime + nextIn;
+}
 
       // drops
       setDrops((prev) =>
