@@ -192,8 +192,8 @@ export default function Game() {
     Math.max(400, 1000 - currentLevel * 150);
 
   const getDropFrequencyForLevel = (currentLevel: number) => {
-    const baseMin = Math.max(800, 2000 - currentLevel * 300);
-    const baseMax = Math.max(1500, 3500 - currentLevel * 500);
+    const baseMin = Math.max(600, 1400 - currentLevel * 200);
+    const baseMax = Math.max(1200, 2400 - currentLevel * 300);
     return { min: baseMin, max: baseMax };
   };
 
