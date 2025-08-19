@@ -478,7 +478,7 @@ if (currentTime >= newEnemy.nextDropAt) {
 if (!gameOver) {
   gameLoopRef.current = requestAnimationFrame(loop);
 }
-    };
+    }
 
     gameLoopRef.current = requestAnimationFrame(loop);
     return () => {
