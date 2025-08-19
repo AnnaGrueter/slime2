@@ -44,7 +44,7 @@ const MAX_ENEMIES = 6;
 // Drops
 const DROP_W = 12;
 const DROP_H = 12;
-const DROP_SPEED = 1;
+const DROP_SPEED = 2.5;
 
 // Score/Lives
 const SCORE_PER_SLIME = 10;
@@ -190,8 +190,8 @@ export default function Game() {
     Math.max(3000, 9250 - currentLevel * 1250);
 
   const getDropFrequencyForLevel = (currentLevel: number) => {
-    const baseMin = Math.max(2500, 7250 - currentLevel * 750);
-    const baseMax = Math.max(5000, 13250 - currentLevel * 1750);
+    const baseMin = Math.max(1500, 4000 - currentLevel * 500);
+    const baseMax = Math.max(3000, 7000 - currentLevel * 1000);
     return { min: baseMin, max: baseMax };
   };
 
@@ -233,8 +233,8 @@ export default function Game() {
       x: Math.random() * (W - ENEMY_W),
       y: -ENEMY_H,
       id: nextEnemyIdRef.current++,
-      vx: (Math.random() - 0.5) * 1.0,
-      vy: 0.15 + Math.random() * 0.2,
+      vx: (Math.random() - 0.5) * 2.0,
+      vy: 0.3 + Math.random() * 0.4,
       zigzagTimer: 0,
       zigzagDirection: Math.random() > 0.5 ? 1 : -1,
       nextDropAt: now + nextIn,
