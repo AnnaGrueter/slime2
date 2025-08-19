@@ -832,7 +832,7 @@ export default function Game() {
            // style={{ transform: `scale(${BOARD_SCALE})`, transformOrigin: "top left" }}
             style={{ 
               width: Math.round(W * BOARD_SCALE),
-             // height: Math.round(W * BOARD_SCALE*0.25), // maintain aspect ratio
+             height: Math.round(W * BOARD_SCALE*0.25), // maintain aspect ratio
               imageRendering: 'pixelated'
             }}
           />
