@@ -11,8 +11,8 @@ const ABOUT_SCALE = 0.8;
 const HELP_SCALE = 0.75;
 const INTRO_SCALE = 0.75;
 const ENEMIES_SCALE = 0.75;
-const BOARD_SCALE = 0.75;
-const ENTRY_SCALE = 0.75;
+const BOARD_SCALE = 0.25;
+const ENTRY_SCALE = 0.25;
 const GAMEOVER_SCALE = 0.5;
 const HS_ENTRY_SCALE = 0.50;
 
