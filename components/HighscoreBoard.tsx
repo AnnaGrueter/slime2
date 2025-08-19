@@ -11,13 +11,17 @@ interface HighScoreEntry {
 interface HighscoreBoardProps {
   scores?: HighScoreEntry[];
   onClose: () => void;
+  onClear?: () => void;
   className?: string;
+  style?: React.CSSProperties;  // 👈 Add this line
 }
 
-export const HighscoreBoard = ({ 
+const HighscoreBoard = ({
   scores = [],
   onClose,
-  className = ""
+  onClear,
+  className,
+  style
 }: HighscoreBoardProps) => {
   // Ensure we always have exactly 10 entries
   const defaultScores: HighScoreEntry[] = Array.from({ length: 10 }, () => ({ 
@@ -44,9 +48,9 @@ export const HighscoreBoard = ({
 
   return (
     <div 
-      className={`relative ${className}`}
-      style={{ width: '560px', height: '420px' }}
-    >
+    className={`bg-white border-4 border-black shadow-lg ${className || ""}`}
+    style={{ width: "500px", height: "400px", ...style }}
+  >
       {/* Background Image */}
       <img
         src="/components/art/ui/highscores.png"
