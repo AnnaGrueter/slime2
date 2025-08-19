@@ -676,12 +676,6 @@ export default function Game() {
                   imageRendering: 'pixelated'
                 }}
               />
-              <button
-                onClick={resetGame}
-                className="px-6 py-2 bg-white text-black font-mono font-bold hover:bg-gray-200 transition-colors"
-              >
-                Play Again
-              </button>
             </div>
           </div>
         )}
